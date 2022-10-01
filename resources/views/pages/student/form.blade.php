@@ -37,7 +37,13 @@
         <select name="major_id" class="form-control" id="major">
             <option selected disabled>--choose your major--</option>
             @foreach ($majors as $major)
+            <?php if ($student->major_id == $major->id) { ?>
+                <option value="{{ $major->id }}"selected>{{ $major->name }}</option>
+            <?php } else if ($student->major_id==""){ ?>
                 <option value="{{ $major->id }}">{{ $major->name }}</option>
+            <?php } else{ ?>
+                <option value="{{ $major->id }}">{{ $major->name }}</option>
+            <?php } ?>
             @endforeach
         </select>
     </div>
