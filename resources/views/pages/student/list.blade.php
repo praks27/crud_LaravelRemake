@@ -25,7 +25,7 @@
     @foreach ($data as $list)
     <tr>
         {{-- untuk generate nomer urut otomatis --}}
-        <th scope="row">{{ $loop->iteration }}</th>
+        <th scope="row">{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}</th>
         {{-- untuk memanggil data dari database dan di tampilkan --}}
         <td>{{ $list->name }}</td>
         <td>{{ $list->date_birth }}</td>
@@ -46,4 +46,5 @@
     @endforeach
     </tbody>
   </table>
+  {{ $data->links() }}
 @endsection

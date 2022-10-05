@@ -16,8 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
+        $data = student::with(['major'])->paginate(15);
         //ditambahkan with sebelum get untuk memanggil public function major di anggota.php
-        $data = student::with(['major'])->get();
+        // $data = student::with(['major'])->get();
         return view('pages.student.list', ['data' => $data]);
     }
 
