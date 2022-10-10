@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Major;
 use App\Models\student;
+use Illuminate\Http\Request;
 use App\Http\Requests\StorestudentRequest;
 use App\Http\Requests\UpdatestudentRequest;
-use App\Models\Major;
+
 
 class StudentController extends Controller
 {
@@ -14,12 +16,41 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = student::with(['major'])->paginate(15);
+        $search = $request->input('search');
+        $filter = $request->input('filter');
+        $data = student::with(['major']);
+        $major = Major::get();
+
+
+        // select * from students where name like '%$search%'
+        //untuk mengecek inputan search
+        // if ($search) {
+        //     $data->where('name', 'like', "%$search%")
+        //          ->orWhere('address','like', "%$search%");
+        // }
+        if ($search) {
+            $data->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                      ->orWhere('address','like', "%$search%");
+            });
+        }
+
+        if($filter) {
+            $data->where(function ($query) use ($filter){
+                $query->where('major_id','=',$filter);
+            });
+        }
+
+        $data = $data->paginate(15);
         //ditambahkan with sebelum get untuk memanggil public function major di anggota.php
         // $data = student::with(['major'])->get();
-        return view('pages.student.list', ['data' => $data]);
+        return view('pages.student.list', [
+            'data' => $data,
+            'majors' => Major::get()
+
+        ]);
     }
 
     /**

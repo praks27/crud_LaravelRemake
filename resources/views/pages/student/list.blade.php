@@ -2,6 +2,25 @@
 @section('content')
 
 <a href="student/create" class="btn btn-success mb-2">Tambah Data</a>
+<form action="{{ route("student.index") }}" method="GET">
+<div class="row g-3 align-items-center pb-2">
+    <div class="col-auto">
+      <input type="text" id="search" name="search" value="{{ request("search") }}" class="form-control" placeholder="search Here" aria-describedby="passwordHelpInline" autocomplete="off">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-outline-success">search</button>
+    </div>
+    <div class="col-auto">
+        <select name="filter" id="filter" class="form-select">
+            <option selected value="">All</option>
+            @foreach ($majors as $major)
+                <option value="{{ $major->id }}" {{ request('filter') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+</form>
 {{-- untuk menghide dan memunculkan alert --}}
 @if ( $message = Session::get('notif'))
     <div class="alert alert-success" role="alert">
@@ -46,5 +65,5 @@
     @endforeach
     </tbody>
   </table>
-  {{ $data->links() }}
+  {{ $data->withQueryString()->links() }}
 @endsection
