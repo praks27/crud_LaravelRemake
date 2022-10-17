@@ -37,6 +37,7 @@
         <th scope="col">Gender</th>
         <th scope="col">Address</th>
         <th scope="col">Major</th>
+        <th scope="col">Image</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -52,6 +53,7 @@
         <td>{{ $list->address }}</td>
         {{-- ditambahkan name karna untuk memanggil name dari table major yang sebabnya sudah ada belongsto --}}
         <td>{{ $list->major->name }}</td>
+        <td><img src="/storage/{{ $list->image }}" class="img-thumbnail" width="200px" height="200px"></td>
         <td>
             <a href="{{route('student.edit',['student'=>$list->id]) }}" class="btn btn-warning">Edit</a>
             {{-- untuk hapus data di table --}}

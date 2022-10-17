@@ -2,10 +2,10 @@
 @section('content')
 <h3>{{ $student->id ? 'Form Edit Data' : 'Form Input Data'}}</h3>
 @if ($student->id)
-    <form action="{{ route('student.update',['student'=>$student->id]) }}" method="post">
+    <form action="{{ route('student.update',['student'=>$student->id]) }}" method="post" enctype="multipart/form-data">
         @method('PUT')
 @else
-    <form action="{{ route('student.store')}}" method="post">
+    <form action="{{ route('student.store')}}" method="post" enctype="multipart/form-data">
 @endif
     @csrf
     <div class="mb-3">
@@ -47,11 +47,12 @@
             @endforeach
         </select>
     </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" name="image" class="form-control" id="image">
+            <img src="/storage/{{ $student->image }}" class="img-thumbnail" width="200px" height="200px">
+      </div>
     @error('major') <div class="text-muted">{{$message}}</div> @enderror
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
     <button type="submit" class="btn btn-outline-success">Submit</button>
   </form>
 @endsection
