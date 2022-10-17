@@ -7,7 +7,7 @@ use App\Models\student;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorestudentRequest;
 use App\Http\Requests\UpdatestudentRequest;
-
+use Illuminate\Support\Facades\File;
 
 class StudentController extends Controller
 {
@@ -76,6 +76,12 @@ class StudentController extends Controller
     {
         //
         $data = $request->all();
+        // dd($request->file('image')->store('student'));
+        $image = $request->file('image');
+        if ($image) {
+            $data['image'] = $image->store('images/student', 'public');
+        }
+        $data['image'] = $request->file('image')->store('images/student','public');
         student::create($data);
         return redirect('student')->with('notif','berhasil menambah data');
     }
@@ -116,6 +122,18 @@ class StudentController extends Controller
     {
         //
         $data = $request->all();
+        $image = $request->file('image');
+        // CEK APAKAH USER MENGUPLOAD FILE
+        if ($image) {
+            // cek apakah file lama ada didalam folder?
+            $exists = File::exists(storage_path('app/public/').$student->image);
+            if ($exists) {
+                // delete file lama tersebut
+                File::delete(storage_path('app/public/').$student->image);
+            }
+            // upload file baru
+            $data['image'] = $image->store('images/student', 'public');
+        }
         $student -> update($data);
         //untuk memanggil fungsi notif session tambahkan panah setelah kurung,lalu ketikan with
         //untuk parameter pertama berdasarkan nama dari variabel session dan parameter kedua berisikan pesan yang akan di tampilkan
